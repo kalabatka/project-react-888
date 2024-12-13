@@ -18,14 +18,16 @@ function App() {
 
   const toggleTodo = (id) => {
     setTodos(todos.map(todo => {
-      if (todo.id !== id) return todo;
-
-      return {
-        ...todo,
-        done: !todo.done
-      }
-    }))
-  }
+        if (todo.id !== id) return todo;
+        const updatedTodo = { ...todo, done: !todo.done };
+        if (updatedTodo.done) {
+            setAllComplete(allComplete + 1);
+        } else {
+            setAllComplete(allComplete - 1);
+        }
+        return updatedTodo;
+    }));
+}
 
 const removeTodo = (id) => {
   setTodos(todos.filter(todo => todo.id !== id))
@@ -50,7 +52,7 @@ const clearTodos = () => {
         {
           todos.map(todo => {
             return (
-              <li className={todo.done ? "todo done" : "todo"} key={todos.id} onClick={() => toggleTodo(todo.id)}>
+              <li className={todo.done ? "todo done" : "todo"} key={todo.id} onClick={() => toggleTodo(todo.id)}>
                 {todo.text}
                 < img src="./delete.jpg" alt="delete" className="delete_img" onClick={e => {
                   e.stopPropagation();
@@ -66,8 +68,8 @@ const clearTodos = () => {
           <span>All todos: {allTodos}</span>
           <span>Complete: {allComplete}</span>
         </div>
-        <button className="btn" onClick={clearTodos}>Clear All</button>
         </ul>
+        <button className="btn" onClick={clearTodos}>Clear All</button>
       </div>
     </div>
   );
